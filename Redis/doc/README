@@ -1,0 +1,67 @@
+1. Redis主要应用场景（基于C语言开发，数据缓存到内存，所以读取速度非常快）
+        缓存（数据查询、短链接、新闻内容、商品内容等），分布式会话（Session）、聊天室好友列表、任务队列（秒杀、抢购、12306等），应用排行、访问统计、数据过期处理（可以精确到毫秒）
+
+2. Redis相对其他内存数据库（如Memcached）具有如下特点
+    2.1 速度快，不需要等待磁盘的IO（缺点，缓存数据不能太大，受内存限制）
+    2.2 丰富的数据结构，string、list（支持2^32-1个元素）、hash、set、sortedset五种类型
+    2.3 单线程，避免了线程切换和锁机制的性能消耗
+    2.4 可持久化（将内存中数据写入到磁盘），支持RDP和AOP两种方式
+    2.5 支持发布和订阅
+    2.6 支持Lua脚本
+    2.7 支持分布式锁
+    2.8 支持原子操作和事务
+    2.9 支持主-从复制及高可用
+    2.10支持管道，可以多个命令一次发送到服务器，然后服务一次性返回所有结果，大大减少了网络的传输开销
+    
+3. 客户端连接redis命令：redis-cli -h host -p port -a password
+    3.1 客户端操作指令
+       3.1.1  通用指令
+         3.1.1.1  keys pattern  (pattern支持多种通配符：? 一个字符；* 匹配任意字符；[-] 匹配区间内任意字符；\转义字符 )
+         3.1.1.2  exists key    (1 存在；0 不存在)
+         3.1.1.3  expire key time
+         3.1.1.4  type key   (返回数据类型)
+         3.1.1.5  del key
+       3.1.2  string类型操作
+         3.1.2.1  set key value EX time (新增键值，time为过期时间，单位秒)
+         3.1.2.2  mset key1 value1 key2 value 2  (批量复制，原子操作)
+         3.1.2.3  msetnx key1 value1 key2 value 2  (批量复制，原子操作，如果其中一个键存在，全部操作都不会被田间)
+         3.1.2.4  get key
+         3.1.2.5  strlen key (键对应值的String的长度，如果键对应的不是String，则报错。如果键不存在，则返回0)
+         3.1.2.6  incr key  (对应的整数值+1，并返回当前值，非整数则报错)
+         3.1.2.7  incrby key step (对应的整数值+step，并返回当前值，非整数则报错)
+         3.1.2.8  decr key  (对应的整数值-1，并返回当前值，非整数则报错)
+         3.1.2.9  decrby key step  (对应的整数值+step(可以为负数)，并返回当前值，非整数则报错)
+         3.1.2.10 mget key1 key2 (批量获取值)
+       3.1.3  list类型操作(List的下标或索引是从0开始的，下标为负的时候是从后向前数。-1表示最后一个元素。当下标超出边界时，会返回nil)
+         3.1.3.1  rpush key value1 value2  右推入也叫后推入，并返回列表长度
+         3.1.3.2  lpush key value1 value2  左推入也叫前推入
+         3.1.3.3  rpop key                 获取最右列表的值，并删除
+         3.1.3.4  lpop key                 获取最左列表的值，并删除
+         3.1.3.5  llen key                 获取列表长度
+         3.1.3.6  lindxe key index         获取索引index上的值
+         3.1.3.7  lrange key start end     获取索引start-end上的值
+         3.1.3.8  lset key index value     将index上的元素修改为 value
+       3.1.4  Hash类型操作
+         3.1.4.1  hset key filed value     如果值不存在，则新增成功并返回1，如果存在则覆盖返回0
+         3.1.4.2  hget key filed           返回value值，不存在则返会 nil
+         3.1.4.3  hexists key field        检查字段是否存在（0-不存在 1-存在）
+         3.1.4.4  hdel key field1 field2   删除字段
+         3.1.4.5  hkey key                 获取key对应的所有field
+         3.1.4.6  hvals key                获取key对应的所有value
+       3.1.5  Set类型操作(具有值去重作用)
+         3.1.5.1  sadd key member1 member2 向key中添加多个元素，并返回添加成功元素
+         3.1.5.2  srem key member1 member2 向key中移除多个元素
+         3.1.5.3  sismember key member     判断成员是否是key中对象
+         3.1.5.4  scard key                获取key中成员数
+         3.1.5.5  smembers key             获取key中所有成员
+       3.1.6  Zset类型操作(有序的set类型)
+         3.1.6.1  zadd key score1 member1 score2 member2  添加元素，如果score存在则覆盖
+         3.1.6.2  zrem key member1 member2 移除元素
+         3.1.6.3  zscore key member        取得分数值
+         3.1.6.4  zrank key member         获取成员的分数值排名
+         3.1.6.5  zincrby key score member 成员分数加上score
+         3.1.6.6  zrangebyscore key in min max [WITHSCORES] [LIMIT] 从有序集合Key中获取指定分数区间范围内的成员。WITHSCORES表示带上分数值返回；LIMIT选项可以用于翻页
+         3.1.6.7  zcard key                获取key中成员数
+         3.1.6.8  zcount key min max       计算分数区间的成员数
+         
+        

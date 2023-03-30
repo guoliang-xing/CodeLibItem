@@ -1,0 +1,6 @@
+1. RabbitMQ常见的三种消息模型
+  1.1 FanoutExchange(广播模式)，将消息发送到Exchange绑定的queue中，无需匹配路由键
+  1.2 DirectExchange(直连传输)，需要匹配路由键
+  1.3 TopicExchange(主题订阅)，通配式的路由键，*代表一个单词，#代表任意个单词
+
+2. RabbitMQ确认消费机制

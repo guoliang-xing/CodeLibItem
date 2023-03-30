@@ -1,0 +1,45 @@
+1. zookeeper的核心又是，实现了分布式环境的数据一致性，对Zookeeper进行数据访问时，不同的节点返回的数据都是一致的（原理：存储数据时，集群中节点都成功后才会返回成功）
+
+2. 文件目录数与Zookeeper树目录的区别：文件系统只能存放路径信息，Zookeeper可以存放数据
+
+3. ZK客户端命令
+     3.1 create ：创建一个节点
+                语法：create [-s] [-e] path data acl
+               -s 持久顺序节点；-e 临时节点；。默认情况下永久节点；-e -s 临时顺序节点；
+               acl: 用来进行权限控制，默认情况下，不做任何权限控制。
+               path：节点路径。
+               data：节点保存的数据。
+     
+     3.2 ls     ：查看路径下所有节点
+                语法：ls path (path为节点路径)
+                
+     3.3 Get    ：获取节点下的值
+                语法：get path (path为节点路径)
+                返回说明：
+                ctime(createtime):创建该节点的日期
+                mtime(modifytime):修改该节点的日期
+                cZxid:创建该节点的事务ID
+                mZxid:修改该节点的事务ID
+                pZxid:添加和移除子节点更改的事物ID
+                cversion(Children)：当前节点子节点版本号
+                dataversion：当前节点数据版本号
+                dataLength：当前节点数据的长度
+                nodeDate：sxzlxy （String.length）
+                numChidren:当前节点子节点的个数
+                ephemeralOwner：如果是临时节点，该属性是临时节点事务ID。如果不是临时节点，这个值是0
+                 
+     3.4 Set    ：修改节点下的值
+                语法：set path/nodeName value
+     
+    3.5 Delete ：删除节点
+              语法：delete path
+              
+4. 分布式锁的优缺点（适用于高可靠（高可用）而并发量不是太大的场景。）
+    4.1 优点：能有效的解决的分布式问题、可重入问题，使用简单
+    4.2 缺点：ZK分布式锁酰氯不高，每次都要动态的创建和销毁临时节点，只能通过Leader节点操作，并同步到Follwer节点
+    
+    
+    
+    
+    
+    
