@@ -1,0 +1,2 @@
+1.AOP实现多数据源动态切换原理：动态数据本质上key-value的形式存在Map中，在执行时，通过AbstractRoutingDataSource的determineCurrentLookupKey
+  方法获取ThreadLocal中的数据源key，获取对应的数据源。AOP在执行sql操作时，动态改变ThreadLocal对应的key

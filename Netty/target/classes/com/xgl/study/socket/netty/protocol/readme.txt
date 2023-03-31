@@ -1,2 +1,0 @@
-协议格式：
-HEADcontent-length:xxxxHEADBODYxxxxxxBODY

@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,16 +15,13 @@ public class Server {
 
 	public static void main(String[] args) {
 		int port = genPort(args);
-		
 		ServerSocket server = null;
 		ExecutorService service = Executors.newFixedThreadPool(50);
-		
 		try{
 			server = new ServerSocket(port);
 			System.out.println("server started!");
 			while(true){
 				Socket socket = server.accept();
-				
 				service.execute(new Handler(socket));
 			}
 		}catch(Exception e){
@@ -50,11 +48,10 @@ public class Server {
 			BufferedReader reader = null;
 			PrintWriter writer = null;
 			try{
-				
-				reader = new BufferedReader(
-						new InputStreamReader(socket.getInputStream(), "UTF-8"));
-				writer = new PrintWriter(
-						new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+				writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+
+				Boolean flag = true;
 				String readMessage = null;
 				while(true){
 					System.out.println("server reading... ");
@@ -91,6 +88,19 @@ public class Server {
 			}
 		}
 		
+	}
+
+	/**
+	 * 发送消息
+	 * @param socket
+	 */
+	private void sendMsg(Socket socket) throws IOException {
+		PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));;
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			writer.print(sc.nextLine());
+			writer.flush();
+		}
 	}
 	
 	private static int genPort(String[] args){

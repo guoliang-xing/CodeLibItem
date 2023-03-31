@@ -1,0 +1,7 @@
+#服务器端口
+server:
+  port: 8080
+rocketmq:
+  name-server: 192.168.137.24
+  producer:
+    group: my-producer-group

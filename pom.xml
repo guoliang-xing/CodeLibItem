@@ -19,9 +19,13 @@
 		<module>Netty</module>
 		<module>Redis</module>
 		<module>Zookeeper</module>
-		<module>Aop</module>
 		<module>RabbitMQ</module>
-	</modules>
+        <module>RocketMQ</module>
+        <module>JVM</module>
+        <module>Thread</module>
+        <module>WebModel</module>
+        <module>SpringUtil</module>
+    </modules>
 
 	<properties>
 		<java.version>1.8</java.version>
